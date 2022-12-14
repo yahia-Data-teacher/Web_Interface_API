@@ -1,0 +1,145 @@
+{% extends "layout.html" %} {% block content %}
+<div class="col-lg-3 col-md-5">
+  <div class="card card-style mb-4">
+    <div class="card-body">
+      <div class="chart-container" style="position: relative">
+        <canvas id="income_vs_expense"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-lg-5 col-md-7">
+  <div class="card card-style mb-2">
+    <div class="card-body">
+      <div class="chart-container" style="position: relative">
+        <canvas id="expenses_over_time"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-xs-11 col-sm-6 col-md-7">
+  <div class="card card-style mb-1">
+    <div class="card-body">
+      <div class="chart-container" style="position: relative">
+        <canvas id="overtime_expenditure"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block javascript %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    let income_vs_expense_data = JSON.parse({{ income_vs_expense|default("") | tojson }});
+    let income_category_data = JSON.parse({{ income_category|default("") | tojson }});
+
+    
+
+    new Chart(document.getElementById("income_vs_expense").getContext("2d"), {
+            type: "doughnut",
+            data: {
+            labels: ['expense', 'income'],
+            datasets: [
+                {
+                    label: "Income Vs Expenses",
+                    data: income_vs_expense_data,
+                    backgroundColor: [
+                    "#AF7",
+                    "#FA4"
+                        ],
+
+                    borderWidth: 1,
+                    hoverBorderColor: "black",
+                    hoverBorderWidth: 2,
+                    hoverBackgroundColor: 'rgba(154, 245, 140)',
+                    pointHoverRadius: 5
+                },
+            ],
+            },
+            options: {
+                title: {
+                    display: true,
+                        text: "Income Vs Expenses",
+                            fontSize: 20,
+                },
+                plugins: {
+                legend: {
+                    responsive: true,
+                    position: "right",
+                        labels: {
+                        fontColor: "gray"
+                    },
+                    display: true,
+                }
+            },
+
+                elements: {
+                    hitRadius: 3,
+                }
+            },
+        });
+
+  let labels = JSON.parse({{ dates_labels|default("") | tojson }});
+  let amounts = JSON.parse({{ over_time_expenditure|default("") | tojson }});
+
+  new Chart(document.getElementById("expenses_over_time").getContext("2d"), {
+        type: "line",
+        data: {
+        labels: labels,
+        datasets: [
+            {
+                label: "Expenditure Over Time",
+                data: amounts,
+                fill:true,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            },
+        ],
+        },
+        options: {
+            title: {},
+        }
+    });
+
+    let category_labels = JSON.parse({{ income_category_labels|default("") | tojson }});
+    
+    new Chart(ctx = document.getElementById('overtime_expenditure'), {
+        type: 'bar',
+        data: {
+        labels: category_labels,
+        datasets: [{
+            label: "Income_Categories",
+            data: income_category_data,
+            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+            borderWidth: 1,
+            hoverBorderColor: "black",
+            hoverBorderWidth: 2,
+            hoverBackgroundColor: 'rgba(154, 245, 140)',
+            pointHoverRadius: 5
+        }]
+        },
+        options: {
+            title: {
+                display: true,
+                    text: "Income Vs Expenses",
+                        fontSize: 20,
+            },
+            plugins: {
+            legend: {
+                position: "right",
+                
+                display: false,
+            },
+        },
+            elements: {
+                hitRadius: 3,
+            }
+    }
+    });
+    console.log(income_category_data)
+    console.log(category_labels)
+</script>
+{%endblock %} {% endblock %}
