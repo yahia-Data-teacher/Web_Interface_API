@@ -32,9 +32,10 @@
                         </button>
                         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                             <div class="navbar-nav ml-auto mr-3">
-                                <a class="nav-item nav-link" href="{{ url_for('add_expense') }}">Ajouter une ligne</a>
-                                <a class="nav-item nav-link" href="{{ url_for('dashboard') }}">Visualisation des Graphes</a>
+                                <a href="{{ url_for('add_expense') }}" class="btn btn-outline-primary" style="margin: 0 5px; padding: 0 5px;">Add</a>
+                                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-success" style="margin: 0 5px; padding: 0 5px;">Dashboard</a>
                             </div>
+                            
                         </div>
                     </nav>
                 </header>
