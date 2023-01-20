@@ -10,6 +10,8 @@ from sqlalchemy.sql import func
 import json
 
 
+from flask_login import login_required, current_user
+
 # engine = sqa.create_engine(
 #     'postgresql://bccgxmfz:JAsuLsAgJqQYpLUyBCRQXM7ZsmJTGdWn@babar.db.elephantsql.com/bccgxmfz', echo=True)
 # Base = declarative_base()
@@ -18,6 +20,7 @@ import json
 # session.rollback()
 
 @app.route('/')
+@login_required
 def index():
     entries = session.query(IncomeExpenses).order_by(
         IncomeExpenses.date.desc()).all()
@@ -25,6 +28,7 @@ def index():
 
 
 @app.route('/add', methods=["GET", "POST"])
+@login_required
 def add_expense():
     form = UserInputForm()
     if form.validate_on_submit():
@@ -44,6 +48,7 @@ def add_expense():
 
 
 @app.route('/delete/<int:entry_id>')
+@login_required
 def delete(entry_id):
     # connection = psycopg2.connect(url)
     # cursor = connection.cursor()
@@ -60,6 +65,7 @@ def delete(entry_id):
 
 
 @app.route('/dashboard')
+@login_required
 def dashboard():
     session.rollback()
     income_vs_expense  = session.query(func.sum(IncomeExpenses.amount), IncomeExpenses.type).group_by(
@@ -97,3 +103,10 @@ def dashboard():
                            dates_labels = json.dumps(dates_labels),
                            
                            )
+
+
+@app.route('/profile')
+@login_required
+def profile():
+    return render_template('profile.html')
+

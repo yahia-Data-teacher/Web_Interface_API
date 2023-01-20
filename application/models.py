@@ -1,7 +1,10 @@
-import sqlalchemy as sqa
 from datetime import datetime
+
+import sqlalchemy as sqa
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import sessionmaker
+
+from flask_login import UserMixin
 
 url = 'postgresql://pbntciav:i2SRiKluRqf6WtifDKplLNfz6p9lKT_1@floppy.db.elephantsql.com/pbntciav'
 engine = sqa.create_engine(url, echo=True)
@@ -28,3 +31,11 @@ class IncomeExpenses(Base):
             self.category,
             self.date,
             self.amount)
+
+
+class User(Base):
+    id = sqa.Column(sqa.Integer, primary_key=True) # primary keys are required by SQLAlchemy
+    email = sqa.Column(sqa.String(100), unique=True)
+    password = sqa.Column(sqa.String(100))
+    name = sqa.Column(sqa.String(1000))
+
