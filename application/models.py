@@ -12,7 +12,7 @@ Base = declarative_base()
 
 # # create a Session
 Session = sessionmaker(bind=engine)
-session = Session()
+SESSION = Session()
 
 
 class IncomeExpenses(Base):
@@ -33,9 +33,20 @@ class IncomeExpenses(Base):
             self.amount)
 
 
-class User(Base):
-    id = sqa.Column(sqa.Integer, primary_key=True) # primary keys are required by SQLAlchemy
+class User(Base, UserMixin):
+    __tablename__ = 'user'
+    # id = db.Column(db.Integer,primary_key=True)
+    # email = db.Column(db.String(100),nullable=False)
+    # password= db.Column(db.String(100),nullable=False)
+    # name= db.Column(db.String(1000),nullable=False)
+    id = sqa.Column(sqa.Integer, primary_key=True)  # primary keys are required by SQLAlchemy
     email = sqa.Column(sqa.String(100), unique=True)
     password = sqa.Column(sqa.String(100))
     name = sqa.Column(sqa.String(1000))
 
+    def __repr__(self):
+        return "User(id = {}, email = {}, password = {}, name = {})".format(
+            self.id,
+            self.email,
+            self.password,
+            self.name)
